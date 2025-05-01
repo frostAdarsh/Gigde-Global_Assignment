@@ -15,7 +15,7 @@ const Home = () => {
           <div className="col-lg-10 col-md-10">
             <Navbar />
             <div className="row mt-4 mx-1">
-              <div className="col-md-3 col-lg-3">
+              <div >
                 <Projects/>
               </div>
             </div>
