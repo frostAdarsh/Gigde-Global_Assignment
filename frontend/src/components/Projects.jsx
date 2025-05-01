@@ -1,15 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useProjectStore } from "../store/useProjectStore";
 import { MdDelete } from "react-icons/md";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaCheck } from "react-icons/fa";
 
 const Projects = () => {
   const { fetchProjects, projects, isLoading, deleteProject, updateTask } =
     useProjectStore();
 
+  const [editingTask, setEditingTask] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    status: "",
+  });
+
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  const handleEditClick = (task, projectId) => {
+    setEditingTask({ taskId: task._id, projectId });
+    setFormData({
+      title: task.title,
+      description: task.description,
+      status: task.status,
+    });
+  };
+
+  const handleSave = async () => {
+    await updateTask(editingTask.projectId, editingTask.taskId, formData);
+    setEditingTask(null);
+  };
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   return (
     <div className="projects-container">
@@ -30,21 +58,56 @@ const Projects = () => {
                 </div>
               </div>
 
-              <h3 className="task-heading">Tasks:-</h3>
+              <h3 className="task-heading">Tasks:</h3>
               {project.tasks?.length > 0 ? (
                 <div className="task-list">
                   {project.tasks.map((task) => (
                     <div key={task._id} className="task-item">
-                      <div className="edit-icon">
-                        <FaRegEdit
-                          onClick={() => updateTask(project._id, task._id)}
-                        />
-                      </div>
-
-                      <div>{task.title}</div>
-                      <hr />
-                      <div>{task.description}</div>
-                      <div className="task-status">{task.status}</div>
+                      {editingTask?.taskId === task._id ? (
+                        <>
+                          <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            className="task-input"
+                            placeholder="Title"
+                          />
+                          <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            className="task-textarea"
+                            placeholder="Description"
+                          />
+                          <select
+                            name="status"
+                            value={formData.status}
+                            onChange={handleChange}
+                            className="task-select"
+                          >
+                            <option value="">Select status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="in progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                          </select>
+                          <button className="save-btn" onClick={handleSave}>
+                            <FaCheck /> Save
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <div className="edit-icon">
+                            <FaRegEdit
+                              onClick={() => handleEditClick(task, project._id)}
+                            />
+                          </div>
+                          <div>{task.title}</div>
+                          <hr />
+                          <div>{task.description}</div>
+                          <div className="task-status">{task.status}</div>
+                        </>
+                      )}
                     </div>
                   ))}
                 </div>
