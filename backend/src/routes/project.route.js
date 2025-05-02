@@ -5,7 +5,7 @@ import {
   getAllProjects,
   deleteProject,
   updateTask,
-  addTaskToProject,
+  // addTaskToProject,
 } from "../controller/project.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
@@ -16,7 +16,7 @@ router.post("/", protectRoute, createProject);
 router.get("/", protectRoute, getAllProjects);
 router.delete("/:id", protectRoute, deleteProject);
 
-router.post("/:projectId/tasks", protectRoute, addTaskToProject);
+// router.post("/:projectId/tasks", protectRoute, addTaskToProject);
 
 
 router.put("/:projectId/tasks/:taskId", protectRoute, updateTask);

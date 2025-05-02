@@ -67,43 +67,43 @@ export const deleteProject = async (req, res) => {
   }
 };
 
-export const addTaskToProject = async (req, res) => {
-  try {
-    const { projectId } = req.params;
-    const { title, description, status } = req.body;
-    const user = req.user;
+// export const addTaskToProject = async (req, res) => {
+//   try {
+//     const { projectId } = req.params;
+//     const { title, description, status } = req.body;
+//     const user = req.user;
 
-    if (!title || !description) {
-      return res.status(400).json({ message: "Title and description are required" });
-    }
+//     if (!title || !description) {
+//       return res.status(400).json({ message: "Title and description are required" });
+//     }
 
-    const project = await Project.findOne({ _id: projectId, user: user._id });
+//     const project = await Project.findOne({ _id: projectId, user: user._id });
 
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
-    }
+//     if (!project) {
+//       return res.status(404).json({ message: "Project not found" });
+//     }
 
-    // Push new task to the tasks array
-    project.tasks.push({
-      title,
-      description,
-      status: status || "pending",
-      createdAt: new Date(),
-      completedAt: status === "completed" ? new Date() : null,
-    });
+//     // Push new task to the tasks array
+//     project.tasks.push({
+//       title,
+//       description,
+//       status: status || "pending",
+//       createdAt: new Date(),
+//       completedAt: status === "completed" ? new Date() : null,
+//     });
 
-    await project.save();
+//     await project.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Task added to project successfully",
-      project,
-    });
-  } catch (error) {
-    console.log("Error in addTaskToProject:", error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       message: "Task added to project successfully",
+//       project,
+//     });
+//   } catch (error) {
+//     console.log("Error in addTaskToProject:", error.message);
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 
 export const updateTask = async (req, res) => {
