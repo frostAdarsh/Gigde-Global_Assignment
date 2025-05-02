@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.9.0",
     "bootstrap": "^5.0.1",
+    "gigde_golbal_solution": "file:..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
